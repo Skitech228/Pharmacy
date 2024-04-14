@@ -1,0 +1,84 @@
+﻿<Window x:Class="Pharmacy.UI.Window1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Pharmacy.UI"
+                xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Window" Height="450" Width="800">
+    <!--Основной элемент, в котором будет все содержимое окна-->
+    <materialDesign:DrawerHost
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                BorderThickness="0"
+                BorderBrush="{DynamicResource MaterialDesignDivider}" Margin="0">
+        <!--Собственно, сама выдвижная панель-->
+        <materialDesign:DrawerHost.LeftDrawerContent>
+            <StackPanel Margin="5" Width="300">
+                <Button Content="Кнопка1" Height="30"
+                            Style="{StaticResource MaterialDesignFlatButton}"/>
+                <Button Content="Кнопка2" Height="30"
+                            Style="{StaticResource MaterialDesignFlatButton}"/>
+
+
+                <Separator Style="{StaticResource MaterialDesignDarkSeparator}" 
+                               Margin="10"/>
+
+                <Button
+                            Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+                            CommandParameter="{x:Static Dock.Left}"
+                            Margin="4"
+                            HorizontalAlignment="Center"
+                            Style="{DynamicResource MaterialDesignFlatButton}">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="CloseBoxOutline" Foreground="{StaticResource PrimaryHueDarkBrush}"
+                                                 Height="25" Width="25"/>
+                        <TextBlock Text="Закрыть" Foreground="{StaticResource PrimaryHueDarkBrush}" Margin="3"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <!--Тут контент самого окна-->
+        </materialDesign:DrawerHost.LeftDrawerContent>
+        <Grid>
+            <Grid VerticalAlignment="top" HorizontalAlignment="Stretch">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="{Binding ActHeight}" />
+                </Grid.RowDefinitions>
+
+                <!--Верхняя панель-->
+                <materialDesign:ColorZone
+                                Mode="Standard"
+                                Padding="0">
+
+                    <DockPanel VerticalAlignment="Center" Margin="5,2,2,2" Height="40">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <!--MenuButton-->
+                            <Button x:Name="ButtonOpen" HorizontalAlignment="Left" VerticalAlignment="Top" 
+                                        Background="{x:Null}" BorderBrush="{x:Null}" Width="40" Height="40" Padding="0"
+                                        Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                                        CommandParameter="{x:Static Dock.Left}">
+                                <materialDesign:PackIcon Kind="Menu" Foreground="{StaticResource PrimaryHueMidBrush}" Width="30" Height="30"/>
+                            </Button>
+
+                        </StackPanel>
+
+
+                    </DockPanel>
+
+                </materialDesign:ColorZone>
+
+                <!--Тут основной контент-->
+                <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                        <ContentControl x:Name="ContentField" Content="{Binding CurrentControl}" Opacity="{Binding FrameOpacity}" MaxHeight="{Binding ActHeight}"/>
+                    </ScrollViewer>
+
+                </StackPanel>
+
+            </Grid>
+        </Grid>
+    </materialDesign:DrawerHost>
+</Window>
