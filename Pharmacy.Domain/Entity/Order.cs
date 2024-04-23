@@ -19,8 +19,11 @@ namespace Pharmacy.Domain.Entity
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }
 
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:d}")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
+        [DataType(DataType.Time)]
+        [DisplayFormat(DataFormatString = "{0:hh-mm-ss}", ApplyFormatInEditMode = true)]
         public TimeSpan Time { get; set; }
         public ICollection<Product> Products { get; set; }
     }

@@ -9,7 +9,7 @@ using Pharmacy.Domain.Entity;
 
 namespace Pharmacy.Database.Conigurations
 {
-    internal class AddressConfiguration : IEntityTypeConfiguration<Address>
+    public class AddressConfiguration : IEntityTypeConfiguration<Address>
     {
         public void Configure(EntityTypeBuilder<Address> builder)
         {

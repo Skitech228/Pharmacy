@@ -24,5 +24,10 @@ namespace Pharmacy.UI.ViewMoel.Pages
         {
             InitializeComponent();
         }
+
+        private void PopupBox_ColorChanged(object sender, RoutedPropertyChangedEventArgs<Color> e)
+        {
+
+        }
     }
 }

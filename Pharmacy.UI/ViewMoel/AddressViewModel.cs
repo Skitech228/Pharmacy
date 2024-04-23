@@ -153,6 +153,20 @@ namespace Pharmacy.UI.ViewMoel
             });
         }
 
+        public async Task OnUpateAdressCommandExecuted(AddressEntity selectedAddress)
+        {
+            await _addressService.UpdateAsync(selectedAddress.Entity);
+
+            await ReloadAddressesAsync();
+            IsActionSuccess = "Visible";
+
+            await Task.Run(() =>
+            {
+                Thread.Sleep(2500);
+                IsActionSuccess = "Hidden";
+            });
+        }
+
         private async Task ReloadAddressesAsync()
         {
             var dbSales = await _addressService.GetAllAsync();

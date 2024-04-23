@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Pharmacy.UI.ViewMoel.Pages.PageViewModel
 {
-    internal class RegistrationPageViewModel : ViewModelBase, INavigationAware
+    public class RegistrationPageViewModel : ViewModelBase, INavigationAware
     {
         public UserViewModel _usersContext;
         public AddressViewModel _addressesContext;

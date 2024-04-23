@@ -4,11 +4,250 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Pharmacy.UI.ViewMoel.Pages"
+      xmlns:prism="http://prismlibrary.com/"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="MainWindowPage">
 
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Rectangle x:Name="Opacity" Grid.RowSpan="11" Fill="#f0f1f1" Grid.ColumnSpan="11" Width="1400" Height="800"
+           Grid.Column="0" />
+
+        <!--Добаление в корзину-->
+        <Grid Grid.Row="1" Grid.Column="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Grid.Column="3" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+           Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                    Visibility="{Binding OrdersContext.ElementsVisibility}"
+                    Command="{Binding AddProductOnCart}"
+           ToolTip="MaterialDesignFloatingActionMiniSecondaryButton">
+                <materialDesign:PackIcon Kind="CartPlus"/>
+            </Button>
+        </Grid>
+        <!--Удаление из корзины-->
+        <Grid Grid.Row="1" Grid.RowSpan="3" Grid.Column="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Grid.Column="3" Grid.ColumnSpan="3" Grid.RowSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+           
+           Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                    Visibility="{Binding OrdersContext.ElementsVisibility}"
+                    Command="{Binding RemoveProductOnCart}"
+           ToolTip="MaterialDesignFloatingActionMiniSecondaryButton">
+                <materialDesign:PackIcon Kind="CartMinus"/>
+            </Button>
+        </Grid>
+        <!--Очистить корзину-->
+        <Grid Grid.Row="5" Grid.Column="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button Grid.Column="3" Grid.ColumnSpan="3" Grid.RowSpan="5" HorizontalAlignment="Center" VerticalAlignment="Center"
+    Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+    ToolTip="MaterialDesignFloatingActionMiniSecondaryButton"
+                    Command="{Binding ClearCart}"
+                    Visibility="{Binding OrdersContext.ElementsVisibility}">
+                <materialDesign:PackIcon Kind="CartOff"/>
+            </Button>
+        </Grid>
+        <!--Товары-->
+        <ListView Grid.ColumnSpan="5" Grid.RowSpan="4" Grid.Row="1"
+           HorizontalAlignment="Left" VerticalAlignment="Top"
+           Height="340" Width="725" Margin="0,-10,0,0"
+           ItemsSource="{Binding ProductsContext.Products}"
+           SelectedItem="{Binding ProductsContext.SelectedProduct, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border>
+                        <WrapPanel>
+                            <Image Width="100" Height="100" Stretch="Uniform"
+                     Source="{Binding Entity.Image, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"/>
+                            <TextBlock Text=" Название: " FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+             Text="{Binding Entity.Name, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                            <TextBlock Text=" Цена: " FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+             Text="{Binding Entity.Prise, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                            <TextBlock Text=" Описаное: " FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+             Text="{Binding Entity.Description, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                            <TextBlock Text=" Категория: " FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+             Text="{Binding Entity.Category, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                        </WrapPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!--Main menu-->
+        <materialDesign:DrawerHost  Grid.ColumnSpan="5" Grid.RowSpan="5"
+     HorizontalAlignment="Stretch"
+     VerticalAlignment="Stretch"
+     BorderThickness="0" Name="Host" 
+     BorderBrush="{DynamicResource MaterialDesignDivider}"
+     IsLeftDrawerOpen="{Binding IsDialogOpen}">
+            <!--Собственно, сама выдвижная панель-->
+            <materialDesign:DrawerHost.LeftDrawerContent >
+                <Grid Width="80">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <!--user-->
+                    <StackPanel Grid.ColumnSpan="2" Grid.Row="0" 
+                     HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="AccountCircle" 
+                                          Foreground="{StaticResource PrimaryHueDarkBrush}" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          Height="65" Width="65"/>
+                    </StackPanel>
+                    <Button Grid.Row="0" Height="65" Width="65" Grid.ColumnSpan="2"
+                         Command="{Binding GoToUserPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+             HorizontalAlignment="Center" VerticalAlignment="Center"
+             Style="{DynamicResource MaterialDesignFlatButton}">
+                    </Button>
+                    <!--cart-->
+                    <StackPanel Grid.ColumnSpan="2" Grid.Row="1"
+                     HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="InformationBoxOutline" 
+                                          Foreground="{StaticResource PrimaryHueDarkBrush}" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          Height="65" Width="65"/>
+                    </StackPanel>
+                    <Button Grid.Row="1" Height="65" Width="65" Grid.ColumnSpan="2"
+             HorizontalAlignment="Center" VerticalAlignment="Center"
+                     Command="{Binding GoToInformationPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+             Style="{DynamicResource MaterialDesignFlatButton}">
+                    </Button>
+                    <!--information-->
+                    <StackPanel Grid.ColumnSpan="2" Grid.Row="2"
+                     HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <materialDesign:PackIcon Kind="CartOutline" 
+                                          Foreground="{StaticResource PrimaryHueDarkBrush}" 
+                                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                                          Height="65" Width="65"/>
+                    </StackPanel>
+                    <Button Grid.Row="2" Height="65" Width="65" Grid.ColumnSpan="2"
+                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                            Command="{Binding GoToCartPage}"
+                 Style="{DynamicResource MaterialDesignFlatButton}">
+                    </Button>
+                    <!--close menu-->
+                    <StackPanel HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Grid.ColumnSpan="2" Grid.Row="7">
+                        <materialDesign:PackIcon Kind="CloseBoxOutline"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Height="65" Width="65"
+                                      Foreground="{StaticResource PrimaryHueDarkBrush}"/>
+                    </StackPanel>
+                    <Button Grid.Row="7" Grid.ColumnSpan="2" Height="65" Width="65"
+             Command="{x:Static materialDesign:DrawerHost.CloseDrawerCommand}"
+             CommandParameter="{x:Static Dock.Left}"
+             HorizontalAlignment="Center" VerticalAlignment="Center"
+             Style="{DynamicResource MaterialDesignFlatButton}">
+                    </Button>
+                </Grid>
+            </materialDesign:DrawerHost.LeftDrawerContent>
+            <Grid>
+                <Grid VerticalAlignment="top" HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <materialDesign:ColorZone Padding="16" Mode="PrimaryDark" Grid.RowSpan="2">
+
+                        <DockPanel>
+                            <materialDesign:PopupBox DockPanel.Dock="Right" PlacementMode="BottomAndAlignRightEdges">
+                                <StackPanel Background="WhiteSmoke" Height="100">
+                                    <Border Height="45" Width="115" BorderThickness="2" BorderBrush="LightGreen"
+                                            CornerRadius="10">
+                                        <Button Height="45" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                Content="Создать заказ" Command="{Binding OrdersContext.AddCommand}"/>
+                                    </Border>
+                                    <Label Height="10" Width="125"/>
+                                    <Border Height="45" Width="115" BorderThickness="2" BorderBrush="LightGreen"
+                                            CornerRadius="10">
+                                        <Button Height="45" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                Content="Удалить заказ" Command="{Binding OrdersContext.ReloadCommand}"/>
+                                    </Border>
+                                </StackPanel>
+                            </materialDesign:PopupBox>
+                            <StackPanel Orientation="Horizontal">
+                                <ToggleButton Style="{StaticResource MaterialDesignHamburgerToggleButton}" 
+                           Command="{x:Static materialDesign:DrawerHost.OpenDrawerCommand}"
+                           CommandParameter="{x:Static Dock.Left}" />
+                                <TextBlock Margin="30,0,0,0" VerticalAlignment="Center" 
+                                Text="Онлайн аптека Фармакон" FontSize="30" />
+                            </StackPanel>
+                        </DockPanel>
+
+                    </materialDesign:ColorZone>
+                </Grid>
+            </Grid>
+        </materialDesign:DrawerHost>
+        <TextBlock Text="{Binding OrdersContext.ActionText}" FontSize="18" Grid.Column="2" Grid.ColumnSpan="3" Foreground="White" 
+                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="100,-5,0,0"
+                   Visibility="{Binding OrdersContext.IsActionSuccess}"/>
     </Grid>
 </Page>

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Pharmacy.UI.ViewMoel.Pages.PageViewModel
 {
-    internal class InformationPageViewModel : ViewModelBase, INavigationAware
+    public class InformationPageViewModel : ViewModelBase, INavigationAware
     {
         private readonly IRegionManager _regionManager;
         private DelegateCommand _closeInformationCommand;

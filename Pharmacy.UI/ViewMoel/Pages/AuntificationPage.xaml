@@ -71,11 +71,11 @@
                         ToolTip="MaterialDesignFloatingActionMiniSecondaryDarkButton"
                         Command="{Binding CloseAuntification, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
                 </Button>
-                <materialDesign:PackIcon Foreground="{Binding ElementName=FloatingPasswordBox, Path=BorderBrush}"
+                <materialDesign:PackIcon
                      Width="25" Height="20" Kind="CloseCircleOutline" VerticalAlignment="Top" HorizontalAlignment="Right"
                      Grid.RowSpan="2" Grid.Column="10" Grid.Row="0" Margin="0,2,0,0" IsHitTestVisible="False" />
 
-                <TextBlock Text="Аутентификация" Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                <TextBlock Text="Авторизация" Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                    FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Center"
                    Grid.ColumnSpan="11" Grid.RowSpan="3" Foreground="Green" />
             <!--Телефон-->
@@ -118,12 +118,10 @@
             <StackPanel Grid.ColumnSpan="5" Grid.RowSpan="3" Grid.Column="3" Grid.Row="6" Width="135" Height="150">
                 <Button
                       Content="Вход"
-                      IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                       Style="{StaticResource MaterialDesignPaperSecondaryDarkButton}"
                     Command="{Binding AutorizeUser, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}" Cursor=""/>
                 <Button Margin="0,10,0,0" 
                           Content="Регистрация"
-                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                           Style="{StaticResource MaterialDesignPaperSecondaryDarkButton}" 
                         Command="{Binding RegistrationUser, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"/>
             </StackPanel>

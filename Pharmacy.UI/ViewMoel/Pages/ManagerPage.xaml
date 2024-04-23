@@ -4,11 +4,363 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:Pharmacy.UI.ViewMoel.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="ManagerPage">
 
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <!--#region Товары-->
+        <Rectangle x:Name="Opacity" Grid.RowSpan="11" Fill="#f0f1f1" Grid.ColumnSpan="11" Width="1400" Height="800"
+           Grid.Column="0" />
+        <!--Закрыть форму-->
+        <Button  Grid.RowSpan="2" Grid.Column="10" Grid.Row="0" Width="25" Height="25"
+VerticalAlignment="Top" HorizontalAlignment="Right"
+ToolTip="MaterialDesignFloatingActionMiniSecondaryDarkButton"
+Command="{Binding CloseUserPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+        </Button>
+        <materialDesign:PackIcon Foreground="{Binding ElementName=FloatingPasswordBox, Path=BorderBrush}"
+                     Width="25" Height="20" Kind="CloseCircleOutline" VerticalAlignment="Top" HorizontalAlignment="Right"
+                     Grid.RowSpan="2" Grid.Column="10" Grid.Row="0" Margin="0,2,0,0" IsHitTestVisible="False" />
+        <TextBlock Text="Товары" Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                           FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Grid.ColumnSpan="4" Grid.RowSpan="3" Foreground="Green" />
+        <!--Кнопка отчетов-->
+        <StackPanel Grid.ColumnSpan="3" Grid.Column="3" 
+                            Grid.Row="0" Grid.RowSpan="3" Margin="0,0,0,0" Width="100" Height="35">
+            <Button 
+                          Content="Отчеты"
+                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                          Style="{StaticResource MaterialDesignPaperSecondaryDarkButton}" 
+                        Command="{Binding ShowReportsPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <!--Кнопка отчетов-->
+        <StackPanel Grid.ColumnSpan="3" Grid.Column="5" 
+                            Grid.Row="0" Grid.RowSpan="3" Margin="0,0,0,0" Width="100" Height="35">
+            <Button 
+                          Content="Заказы"
+                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                          Style="{StaticResource MaterialDesignPaperSecondaryDarkButton}" 
+                        Command="{Binding ShowOrdersPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <!--Товары-->
+        <ListView Grid.Column="0" Grid.ColumnSpan="9" Grid.RowSpan="6" Grid.Row="2"
+   HorizontalAlignment="Center" VerticalAlignment="Center"
+   Height="200" Width="600"
+   ItemsSource="{Binding ProductsContext.Products}"
+   SelectedItem="{Binding ProductsContext.SelectedProduct, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border>
+                        <WrapPanel>
+                            <Image Width="100" Height="100" Stretch="Uniform"
+        Source="{Binding Entity.Image, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}"/>
+                            <TextBlock Text=" Назание: " FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+Text="{Binding Entity.Name, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                            <TextBlock Text=" Цена: " FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+Text="{Binding Entity.Prise, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                            <TextBlock Text=" Описание: " FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+Text="{Binding Entity.Description, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                            <TextBlock Text=" Категория: " FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+Text="{Binding Entity.Category, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                        </WrapPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!--Добаление-->
+        <Button Grid.Column="9" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+           IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+           Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                Command="{Binding ProductsContext.AddCommand}"
+           ToolTip="MaterialDesignFloatingActionMiniSecondaryButton">
+            <materialDesign:PackIcon Kind="PlusThick"/>
+        </Button>
+        <!--Удаление-->
+        <Button Grid.Column="9" Grid.ColumnSpan="3" Grid.Row="3" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+           IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+           Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                Command="{Binding ProductsContext.RemoveCommand}"
+           ToolTip="MaterialDesignFloatingActionMiniSecondaryButton">
+            <materialDesign:PackIcon Kind="Minus"/>
+        </Button>
+        <!--Обновление-->
+        <Button Grid.Column="9" Grid.ColumnSpan="3" Grid.Row="4" Grid.RowSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+           IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+           Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                Command="{Binding ProductsContext.ReloadCommand}"
+           ToolTip="MaterialDesignFloatingActionMiniSecondaryButton">
+            <materialDesign:PackIcon Kind="Reload"/>
+        </Button>
+        <!--Добаление-->
+        <Button Grid.Column="9" Grid.ColumnSpan="3" Grid.Row="6" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+   Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                Visibility="{Binding ProductsContext.ElementsVisibility}"
+                Command="{Binding ProductsContext.ApplyChangesCommand}"
+   ToolTip="MaterialDesignFloatingActionMiniSecondaryButton">
+            <materialDesign:PackIcon Kind="ContentSavePlusOutline"/>
+        </Button>
+        <!--Название-->
+        <StackPanel Grid.Row="8" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Width="100" Height="100">
+            <TextBox materialDesign:HintAssist.Hint="Назание"
+                     Text="{Binding ProductsContext.SelectedProduct.Entity.Name, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                     Visibility="{Binding ProductsContext.ElementsVisibility}"
+    HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"
+    materialDesign:TextFieldAssist.UnderlineBrush="Green"
+    materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        </StackPanel>
+        <!--Цена-->
+        <StackPanel Grid.Row="8" Grid.Column="2" Grid.RowSpan="2" Grid.ColumnSpan="3" Width="100" Height="100">
+            <TextBox materialDesign:HintAssist.Hint="Цена" 
+                     Text="{Binding ProductsContext.SelectedProduct.Entity.Prise, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                     Visibility="{Binding ProductsContext.ElementsVisibility}"
+HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"
+materialDesign:TextFieldAssist.UnderlineBrush="Green"
+materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        </StackPanel>
+        <!--Описание-->
+        <StackPanel Grid.Row="8" Grid.Column="4" Grid.RowSpan="2" Grid.ColumnSpan="3" Width="100" Height="100">
+            <TextBox materialDesign:HintAssist.Hint="Описание"
+                     Text="{Binding ProductsContext.SelectedProduct.Entity.Description, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                     Visibility="{Binding ProductsContext.ElementsVisibility}"
+HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"
+materialDesign:TextFieldAssist.UnderlineBrush="Green"
+materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        </StackPanel>
+        <!--Категория-->
+        <StackPanel Margin="0,11,0,0" Grid.Row="8" Grid.Column="6" Grid.RowSpan="2" Grid.ColumnSpan="3" Width="100" Height="100">
+            <ComboBox materialDesign:HintAssist.Hint="Категория"
+                     Text="{Binding ProductsContext.SelectedProduct.Entity.Category, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                     Visibility="{Binding ProductsContext.ElementsVisibility}"
+HorizontalAlignment="Center" VerticalAlignment="Center" Width="100"
+materialDesign:TextFieldAssist.UnderlineBrush="Green"
+materialDesign:TransitionAssist.DisableTransitions="True">
+                <ComboBoxItem
+                    Content="Препараты без рецепта" />
+                <ComboBoxItem
+                    Content="Препараты с рецептом" />
+                <ComboBoxItem
+                    Content="Гигиена" />
+                <ComboBoxItem
+                    Content="Защитные средства" />
+                <ComboBoxItem 
+                    Content="Медицинские изделия"/>
+            </ComboBox>
+        </StackPanel>
+        <!--Сохранение изменений-->
+        <Button Grid.Column="8" Grid.ColumnSpan="2" Grid.Row="7" Grid.RowSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+   Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                Visibility="{Binding ProductsContext.ElementsVisibility}"
+Command="{Binding SetImage}"
+   ToolTip="MaterialDesignFloatingActionMiniSecondaryButton">
+            <materialDesign:PackIcon Kind="ImageOutline"/>
+        </Button>
+    <!--#endregion-->
+        <!--#region Заказы-->
+        <Rectangle x:Name="Opacity2" Grid.RowSpan="11" Fill="#f0f1f1" Grid.ColumnSpan="11" Width="1400" Height="800"
+           Grid.Column="0" Visibility="{Binding IsOrdersVisible}" />
+        <!--Закрыть форму-->
+        <Button  Grid.RowSpan="2" Grid.Column="10" Grid.Row="0" Width="25" Height="25"
+VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="{Binding IsOrdersVisible}"
+ToolTip="MaterialDesignFloatingActionMiniSecondaryDarkButton"
+Command="{Binding CloseUserPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+        </Button>
+        <materialDesign:PackIcon Foreground="{Binding ElementName=FloatingPasswordBox, Path=BorderBrush}"
+                                 Visibility="{Binding IsOrdersVisible}"
+                     Width="25" Height="20" Kind="CloseCircleOutline" VerticalAlignment="Top" HorizontalAlignment="Right"
+                     Grid.RowSpan="2" Grid.Column="10" Grid.Row="0" Margin="0,2,0,0" IsHitTestVisible="False" />
+        <TextBlock Text="Заказы" Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                   Visibility="{Binding IsOrdersVisible}"
+                           FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Grid.ColumnSpan="4" Grid.RowSpan="3" Foreground="Green" />
+        <!--Кнопка отчетов-->
+        <StackPanel Grid.ColumnSpan="3" Grid.Column="3" 
+                    Visibility="{Binding IsOrdersVisible}"
+                            Grid.Row="0" Grid.RowSpan="3" Margin="0,0,0,0" Width="100" Height="35">
+            <Button 
+                          Content="Отчеты"
+                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                          Style="{StaticResource MaterialDesignPaperSecondaryDarkButton}" 
+                        Command="{Binding ShowReportsPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <!--Кнопка Товаров-->
+        <StackPanel Grid.ColumnSpan="3" Grid.Column="5" 
+                    Visibility="{Binding IsOrdersVisible}"
+                            Grid.Row="0" Grid.RowSpan="3" Margin="0,0,0,0" Width="100" Height="35">
+            <Button 
+                          Content="Товары"
+                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                          Style="{StaticResource MaterialDesignPaperSecondaryDarkButton}" 
+                        Command="{Binding ShowProsuctsPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <!--Товары-->
+        <ListView Grid.Column="0" Grid.ColumnSpan="9" Grid.RowSpan="4" Grid.Row="3"
+   HorizontalAlignment="Center" VerticalAlignment="Center"
+   Height="250" Width="640" Visibility="{Binding IsOrdersVisible}"
+   ItemsSource="{Binding OrdersContext.Orders}"
+   SelectedItem="{Binding OrdersContext.SelectedOrder, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border >
+                        <WrapPanel>
+                            <TextBlock Text="Цена заказа:" FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+                        Text="{Binding Entity.Prise, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                            <TextBlock Text=" Дата: " FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+                        Text="{Binding Entity.Date, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                            <TextBlock Text=" Время: " FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+                        Text="{Binding Entity.Time, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                        </WrapPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!--Обновление-->
+        <Button Grid.Column="9" Grid.ColumnSpan="3" Grid.Row="2" Grid.RowSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+           IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+           Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                Visibility="{Binding IsOrdersVisible}"
+                Command="{Binding OrdersContext.ReloadCommand}"
+           ToolTip="MaterialDesignFloatingActionMiniSecondaryButton">
+            <materialDesign:PackIcon Kind="Reload"/>
+        </Button>
+        <!--Сохранение-->
+        <Button Grid.Column="9" Grid.ColumnSpan="3" Grid.Row="4" Grid.RowSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+   IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+   Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                Visibility="{Binding OrdersContext.ElementsVisibility}"
+                Command="{Binding OrdersContext.ApplyChangesCommand}"
+   ToolTip="MaterialDesignFloatingActionMiniSecondaryButton">
+            <materialDesign:PackIcon Kind="ContentSavePlusOutline"/>
+        </Button>
+        <!--Статус-->
+        <StackPanel Margin="0,11,0,0" Grid.Row="6" Grid.Column="9" Grid.RowSpan="2" Grid.ColumnSpan="3" Width="135" Height="100">
+            <ComboBox materialDesign:HintAssist.Hint="Статус" 
+                     Text="{Binding OrdersContext.SelectedOrder.Entity.Condition, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                     Visibility="{Binding OrdersContext.ElementsVisibility}"
+HorizontalAlignment="Center" VerticalAlignment="Center" Width="135"
+materialDesign:TextFieldAssist.UnderlineBrush="Green"
+materialDesign:TransitionAssist.DisableTransitions="True">
+                <ComboBoxItem
+                    Content="Выполнен" />
+                <ComboBoxItem
+                    Content="В процессе" />
+                <ComboBoxItem
+                    Content="Ожидает получателя" />
+            </ComboBox>
+        </StackPanel>
+        <!--#endregion-->
+        <!--#region Отчеты-->
+        <Rectangle x:Name="Opacity3" Grid.RowSpan="11" Fill="#f0f1f1" Grid.ColumnSpan="11" Width="1400" Height="800"
+           Grid.Column="0" Visibility="{Binding IsReportsVisible}"/>
+        <!--Закрыть форму-->
+        <Button  Grid.RowSpan="2" Grid.Column="10" Grid.Row="0" Width="25" Height="25"
+VerticalAlignment="Top" HorizontalAlignment="Right" Visibility="{Binding IsReportsVisible}"
+ToolTip="MaterialDesignFloatingActionMiniSecondaryDarkButton"
+Command="{Binding CloseUserPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+        </Button>
+        <materialDesign:PackIcon Foreground="{Binding ElementName=FloatingPasswordBox, Path=BorderBrush}"
+                                 Visibility="{Binding IsReportsVisible}"
+                     Width="25" Height="20" Kind="CloseCircleOutline" VerticalAlignment="Top" HorizontalAlignment="Right"
+                     Grid.RowSpan="2" Grid.Column="10" Grid.Row="0" Margin="0,2,0,0" IsHitTestVisible="False" />
+        <TextBlock Text="Отчеты" Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                   Visibility="{Binding IsReportsVisible}"
+                           FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Center"
+                           Grid.ColumnSpan="4" Grid.RowSpan="3" Foreground="Green" />
+        <!--Кнопка заказов-->
+        <StackPanel Grid.ColumnSpan="3" Grid.Column="3" 
+                    Visibility="{Binding IsReportsVisible}"
+                            Grid.Row="0" Grid.RowSpan="3" Margin="0,0,0,0" Width="100" Height="35">
+            <Button 
+                          Content="Заказы"
+                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                          Style="{StaticResource MaterialDesignPaperSecondaryDarkButton}" 
+                        Command="{Binding ShowOrdersPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <!--Кнопка Товаров-->
+        <StackPanel Grid.ColumnSpan="3" Grid.Column="5" 
+                    Visibility="{Binding IsReportsVisible}"
+                            Grid.Row="0" Grid.RowSpan="3" Margin="0,0,0,0" Width="100" Height="35">
+            <Button 
+                          Content="Товары"
+                          IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                          Style="{StaticResource MaterialDesignPaperSecondaryDarkButton}" 
+                        Command="{Binding ShowProsuctsPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <!--Товары-->
+        <ListView Grid.Column="0" Grid.ColumnSpan="9" Grid.RowSpan="4" Grid.Row="3"
+                  Visibility="{Binding IsReportsVisible}"
+   HorizontalAlignment="Center" VerticalAlignment="Center"
+   Height="250" Width="600"
+   ItemsSource="{Binding ReportsContext.Reports}"
+   SelectedItem="{Binding ReportsContext.SelectedReport, Mode=TwoWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border>
+                        <WrapPanel>
+                            <TextBlock Text="Тема визита:" FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+                        Text="{Binding Entity.FileName, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                            <TextBlock Text="&#x09; Время:" FontSize="20" FontWeight="Bold" />
+                            <TextBlock FontSize="20"
+                        Text="{Binding Entity.Path, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True}" />
+                        </WrapPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!--Обновление-->
+        <Button Grid.Column="9" Grid.ColumnSpan="3" Grid.Row="2" Grid.RowSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+           IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+           Style="{StaticResource MaterialDesignFloatingActionMiniSecondaryButton}"
+                Command="{Binding ReportsContext.ReloadCommand}"
+                Visibility="{Binding IsReportsVisible}"
+           ToolTip="MaterialDesignFloatingActionMiniSecondaryButton">
+            <materialDesign:PackIcon Kind="Reload"/>
+        </Button>
+        <!--Кнопка просмотра отчета-->
+        <StackPanel Grid.ColumnSpan="2" Grid.Column="9" 
+                    Grid.Row="6" Grid.RowSpan="2" Width="140" Height="35">
+            <Button 
+                  Content="Просмтр отчета"
+                Visibility="{Binding ReportsContext.ElementsVisibility}"
+                  IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                  Style="{StaticResource MaterialDesignPaperSecondaryDarkButton}" 
+                Command="{Binding ShowReport, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+        <!--#endregion-->
     </Grid>
 </Page>

@@ -44,26 +44,166 @@
         <Button  Grid.RowSpan="2" Grid.Column="10" Grid.Row="0" Width="25" Height="25"
 VerticalAlignment="Top" HorizontalAlignment="Right"
 ToolTip="MaterialDesignFloatingActionMiniSecondaryDarkButton"
-Command="{Binding CloseInformation, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+Command="{Binding CloseUserPage, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
         </Button>
         <materialDesign:PackIcon Foreground="{Binding ElementName=FloatingPasswordBox, Path=BorderBrush}"
                      Width="25" Height="20" Kind="CloseCircleOutline" VerticalAlignment="Top" HorizontalAlignment="Right"
                      Grid.RowSpan="2" Grid.Column="10" Grid.Row="0" Margin="0,2,0,0" IsHitTestVisible="False" />
-        <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Grid.RowSpan="2">
-            <TextBox
-    VerticalAlignment="Top"
-    materialDesign:HintAssist.HelperText="Helper text"
-    materialDesign:HintAssist.Hint="Text (validated)"
-    Style="{StaticResource MaterialDesignOutlinedTextBox}">
-                <TextBox.Text>
-                    <Binding
-        Path="Text2"
-        UpdateSourceTrigger="PropertyChanged">
-                    </Binding>
-                </TextBox.Text>
+        <!--Телефон-->
+        <StackPanel Grid.Row="3" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="4" Width="200" Height="100">
+            <TextBox x:Name="PhoneTextBox" materialDesign:HintAssist.Hint="375XXXXXXXXX"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Width="150"
+                materialDesign:TextFieldAssist.UnderlineBrush="Green" Text="{Binding SelectedUser.Entity.Telephone, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                MaxLength="12" />
+            <materialDesign:PackIcon Foreground="{Binding ElementName=PhoneTextBox, Path=BorderBrush}"
+          Kind="Phone" HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+        </StackPanel>
+        <!--Имя-->
+        <StackPanel Grid.Row="2" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="4" Width="200" Height="100">
+            <TextBox materialDesign:HintAssist.Hint="Имя" Text="{Binding SelectedUser.Entity.Name, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Width="150"
+                materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        </StackPanel>
+        <!--Пароль-->
+        <StackPanel Grid.ColumnSpan="4" Visibility="{Binding ElementsVisibility}" Grid.RowSpan="3" Grid.Column="1" Grid.Row="4" Width="200" Height="100" Margin="0,20,0,0">
+            <TextBox x:Name="FloatingPasswordBox" MaxLength="8" Text="{Binding Password, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+        HorizontalAlignment="Center" VerticalAlignment="Center" Width="150"
+        materialDesign:TextFieldAssist.UnderlineBrush="Green"
+         materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
+        materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+         FontFamily="pack://application:,,,/Resources/#password" >
+                <TextBox.InputBindings>
+                    <!--Disable CTRL+C (COPY) -->
+                    <KeyBinding Command="ApplicationCommands.NotACommand"
+                    Key="C"
+                    Modifiers="Control" />
+                    <!--Disable CTRL+X (CUT) -->
+                    <KeyBinding Command="ApplicationCommands.NotACommand"
+                    Key="X"
+                    Modifiers="Control" />
+                </TextBox.InputBindings>
+                <TextBox.ContextMenu>
+                    <!--Hide context menu where you could copy/cut as well -->
+                    <ContextMenu Visibility="Collapsed" />
+                </TextBox.ContextMenu>
             </TextBox>
+            <materialDesign:PackIcon Foreground="{Binding ElementName=FloatingPasswordBox, Path=BorderBrush}"
+ Kind="Key"
+ HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+        </StackPanel>
+        <!--Кнопка смены пароля-->
+        <Button  Grid.RowSpan="2" Grid.Column="5" Grid.ColumnSpan="3" Grid.Row="3" Width="155" Height="35"
+                VerticalAlignment="Center" HorizontalAlignment="Left" Content="{Binding PasswordChange}" Foreground="#f0f1f1"
+                ToolTip="Сменить пароль" Margin="-5,0,0,0"
+                Command="{Binding ChangePasswordCommand, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}">
+        </Button>
+        <!--Фамилия-->
+        <StackPanel Grid.Row="2" Grid.Column="4" Grid.RowSpan="3" Grid.ColumnSpan="4" Width="200" Height="100">
+            <TextBox materialDesign:HintAssist.Hint="Фамилия" Text="{Binding SelectedUser.Entity.Surname, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Width="150"
+                materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        </StackPanel>
+        <!--Подтерждение пароля-->
+        <StackPanel Grid.ColumnSpan="4" Visibility="{Binding ElementsVisibility}" Grid.RowSpan="3" Grid.Column="4" Grid.Row="4" Width="200" Height="100" Margin="0,20,0,0">
+            <TextBox x:Name="FloatingPasswordBox2" MaxLength="8" Text="{Binding PasswordConfermation, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Width="150"
+                materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                 materialDesign:TextFieldAssist.CharacterCounterVisibility="Hidden"
+                materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                 FontFamily="pack://application:,,,/Resources/#password" >
+                <TextBox.InputBindings>
+                    <!--Disable CTRL+C (COPY) -->
+                    <KeyBinding Command="ApplicationCommands.NotACommand"
+                            Key="C"
+                            Modifiers="Control" />
+                    <!--Disable CTRL+X (CUT) -->
+                    <KeyBinding Command="ApplicationCommands.NotACommand"
+                            Key="X"
+                            Modifiers="Control" />
+                </TextBox.InputBindings>
+                <TextBox.ContextMenu>
+                    <!--Hide context menu where you could copy/cut as well -->
+                    <ContextMenu Visibility="Collapsed" />
+                </TextBox.ContextMenu>
+            </TextBox>
+            <materialDesign:PackIcon Foreground="{Binding ElementName=FloatingPasswordBox2, Path=BorderBrush}"
+         Kind="Key"
+         HorizontalAlignment="Left" VerticalAlignment="Bottom" />
+        </StackPanel>
+        <!--Адреса-->
+        <TextBlock Text="Адрес" Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Center"
+Grid.ColumnSpan="5" Grid.RowSpan="2" Grid.Row="5" Margin="0,20,20,0" Foreground="Green" />
+        <!--Город-->
+        <StackPanel Grid.Row="6" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="4" Width="200" Height="100">
+            <TextBox materialDesign:HintAssist.Hint="Город" Text="{Binding SelectedUser.Entity.Address.City, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+        HorizontalAlignment="Center" VerticalAlignment="Center" Width="150"
+        materialDesign:TextFieldAssist.UnderlineBrush="Green"
+        materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        </StackPanel>
+        <!--Улица-->
+        <StackPanel Grid.Row="6" Grid.Column="4" Grid.RowSpan="3" Grid.ColumnSpan="4" Width="200" Height="100">
+            <TextBox materialDesign:HintAssist.Hint="Улица" Text="{Binding SelectedUser.Entity.Address.Street, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Width="150"
+                materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        </StackPanel>
+        <!--Дом-->
+        <StackPanel Grid.Row="7" Grid.Column="1" Grid.RowSpan="3" Grid.ColumnSpan="4" Width="200" Height="100">
+            <TextBox materialDesign:HintAssist.Hint="Дом" Text="{Binding SelectedUser.Entity.Address.House, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Width="150"
+                materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+        </StackPanel>
+        <!--Картира-->
+        <StackPanel Grid.Row="7" Grid.Column="4" Grid.RowSpan="3" Grid.ColumnSpan="4" Width="200" Height="100">
+            <TextBox materialDesign:HintAssist.Hint="Картира" Text="{Binding SelectedUser.Entity.Address.Flat, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                HorizontalAlignment="Center" VerticalAlignment="Center" Width="150"
+                materialDesign:TextFieldAssist.UnderlineBrush="Green"
+                materialDesign:TransitionAssist.DisableTransitions="True" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
         </StackPanel>
         <!--Выйти из аккаунта-->
-        
+        <Button  Grid.RowSpan="2" Grid.Column="0" Grid.Row="0" Width="50" Height="50"
+VerticalAlignment="Top" HorizontalAlignment="Left"
+ToolTip="Выйти из аккаунта"
+Command="{Binding AccountExit, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                 >
+        </Button>
+        <materialDesign:PackIcon
+                     Width="50" Height="45" Kind="ExitToApp" VerticalAlignment="Top" HorizontalAlignment="Left"
+                     Grid.RowSpan="2" Grid.Column="0" Grid.Row="0"  IsHitTestVisible="False" />
+        <!--Корзина-->
+        <Button  Grid.RowSpan="2" Grid.Column="10" Grid.Row="5" Width="50" Height="50"
+VerticalAlignment="Top" HorizontalAlignment="Center"
+ToolTip="Выйти из аккаунта"
+Command="{Binding OnGoToCartPageExecuted, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                 >
+        </Button>
+        <materialDesign:PackIcon Margin="11,2,8,0"
+                     Width="50" Height="45" Kind="CartOutline" VerticalAlignment="Top" HorizontalAlignment="Left"
+                     Grid.RowSpan="2" Grid.Column="10" Grid.Row="5"  IsHitTestVisible="False" />
+        <!--Сохранить-->
+        <Button  Grid.RowSpan="2" Grid.Column="10" Grid.Row="7" Width="50" Height="50"
+VerticalAlignment="Top" HorizontalAlignment="Center"
+ToolTip="Сохранить изменения"
+Command="{Binding UserPageUser, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                 >
+        </Button>
+        <materialDesign:PackIcon Margin="11,2,8,0"
+                     Width="50" Height="45" Kind="ContentSaveCogOutline" VerticalAlignment="Top" HorizontalAlignment="Left"
+                     Grid.RowSpan="2" Grid.Column="10" Grid.Row="7"  IsHitTestVisible="False" />
+        <!--ErrorText-->
+        <TextBlock Text="{Binding ErrorText}" Style="{StaticResource MaterialDesignCaptionTextBlock}"
+             FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Center"
+             Grid.ColumnSpan="11" Grid.RowSpan="8" Grid.Row="9" Foreground="Red"
+                         Visibility="{Binding ErrorTextVisible}"/>
+        <!--SuccessText-->
+        <TextBlock Text="{Binding SuccessText}" Style="{StaticResource MaterialDesignCaptionTextBlock}"
+             FontFamily="Times New Roman" VerticalAlignment="Center" HorizontalAlignment="Center"
+             Grid.ColumnSpan="11" Grid.RowSpan="8" Grid.Row="9" Foreground="Green" 
+                    Visibility="{Binding SuccessTextVisible}" />
     </Grid>
 </Page>

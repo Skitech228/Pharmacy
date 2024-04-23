@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using Microsoft.Office.Interop.Excel;
 using Pharmacy.Application.AsyncConmands;
 using Pharmacy.Domain.Entity;
 using Pharmacy.Shared.IEntityService;
@@ -11,6 +12,7 @@ using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 
 namespace Pharmacy.UI.ViewMoel
@@ -23,30 +25,34 @@ namespace Pharmacy.UI.ViewMoel
         private ObservableCollection<OrderEntity> _orders;
         private ObservableCollection<ProductEntity> _products;
         private OrderEntity _selectedOrder;
-        private ProductEntity _selectedProduct;
-        private DelegateCommand _addOrderCommand;
+        private Product _selectedProduct;
+        private AsyncRelayCommand _addOrderCommand;
         private AsyncRelayCommand _removeOrderRelayCommand;
         private AsyncRelayCommand _applyOrderChangesRelayCommand;
         private DelegateCommand _changeEditModeCommand;
         private AsyncRelayCommand _reloadOrdersRelayCommand;
         private string _elementsVisibility;
         private string _isActionSuccess;
+        private string _actionText;
 
-        public OrderViewModel(IOrderService orderService,IProductService productService)
+        public OrderViewModel(  IOrderService orderService,
+                                IProductService productService)
         {
             _orderService = orderService;
             _productService = productService;
             Orders = new ObservableCollection<OrderEntity>();
-            Products = new ObservableCollection<ProductEntity>();
             Dispatcher.CurrentDispatcher.InvokeAsync(async () => await ReloadOrdersAsync());
             ElementsVisibility = "Hidden";
+            IsCalculateSucces = "Hidden";
             IsActionSuccess = "Hidden";
+            StartDate= DateTime.Now.Date;
+            EndDate= DateTime.Now.Date;
 
             //ReloadOrdersAsync()
             //        .Wait();
         }
 
-        public DelegateCommand AddCommand => _addOrderCommand ??= new DelegateCommand(OnAddOrderCommandExecuted);
+        public AsyncRelayCommand AddCommand => _addOrderCommand ??= new AsyncRelayCommand(OnAddOrderCommandExecuted);
 
         public AsyncRelayCommand RemoveCommand =>
                 _removeOrderRelayCommand ??= new AsyncRelayCommand(OnRemoveOrderCommandExecuted);
@@ -62,17 +68,102 @@ namespace Pharmacy.UI.ViewMoel
 
         public AsyncRelayCommand ReloadCommand =>
                 _reloadOrdersRelayCommand ??= new AsyncRelayCommand(ReloadOrdersAsync);
+        public AsyncRelayCommand FiltOrders =>
+        _filtOrdersRelayCommand ??= new AsyncRelayCommand(FiltOrdersAsync);
+
+        private async Task FiltOrdersAsync()
+        {
+            double CalculatedPrise = 0;
+            if (StartDate!=null &&
+                EndDate!=null &&
+                Prise!="" &&
+                Condition!="")
+            {
+                if(Prise== "Минимальная")
+                {
+                    CalculatedPrise = await _orderService.GetMinPriseAsync(StartDate, EndDate, Condition);
+                }
+                if (Prise == "Средняя")
+                {
+                    CalculatedPrise = await _orderService.GetAVGPriseAsync(StartDate, EndDate, Condition);
+                }
+                if (Prise == "Максимальная")
+                {
+                    CalculatedPrise = await _orderService.GetMaxPriseAsync(StartDate, EndDate, Condition);
+                }
+
+                Microsoft.Office.Interop.Excel.Application app = new Microsoft.Office.Interop.Excel.Application();
+                app.Visible = true;
+                app.WindowState = XlWindowState.xlMaximized;
+                CalculatedPrise = await _orderService.GetAVGPriseAsync(StartDate, EndDate, Condition);
+
+                Workbook wb = app.Workbooks.Add(XlWBATemplate.xlWBATWorksheet);
+                Worksheet ws = (Worksheet)wb.Worksheets[1];
+                DateTime currentDate = DateTime.Now;
+
+                ws.Range["A1:A2"].Value = "Начальная дата";
+                ws.Range["A3"].Value = StartDate;
+                ws.Range["B1:B2"].Value = "Конечная дата";
+                ws.Range["B3"].Value = EndDate;
+                ws.Range["A6"].Value = "Текущая дата";
+                ws.Range["A7"].Value = currentDate;
+                ws.Range["С1:С2"].Value = "Статус";
+                ws.Range["С3"].Value = Condition;
+                ws.Range["D1"].FormulaLocal = "Цена";
+                ws.Range["D2:D3"].FormulaLocal = Prise;
+                ws.Range["D4"].FormulaLocal = CalculatedPrise;
+
+                wb.SaveAs($"C:\\Temp\\{Name}.xlsx");
+            }
+        }
 
         public ObservableCollection<OrderEntity> Orders
         {
             get => _orders;
             set => Set(ref _orders, value);
         }
-        public ObservableCollection<ProductEntity> Products
+
+        #region FiltParam
+        public DateTime _statDate;
+        public DateTime _endDate;
+        private string _category;
+        private string _condition;
+        private string _prise;
+        private string _isCalculateSucces;
+        private AsyncRelayCommand _filtOrdersRelayCommand;
+        private string _name;
+
+        public DateTime StartDate
         {
-            get => _products;
-            set => Set(ref _products, value);
+            get => _statDate;
+            set => Set(ref _statDate, value);
         }
+        public DateTime EndDate
+        {
+            get => _endDate;
+            set => Set(ref _endDate, value);
+        }
+        public string Name
+        {
+            get => _name;
+            set => Set(ref _name, value);
+        }
+        public string Prise
+        {
+            get => _prise;
+            set => Set(ref _prise, value);
+        }
+        public string Condition
+        {
+            get => _condition;
+            set => Set(ref _condition, value);
+        }
+        public string Category
+        {
+            get => _category;
+            set => Set(ref _category, value);
+        }
+        #endregion
 
         public bool IsEditMode
         {
@@ -84,6 +175,11 @@ namespace Pharmacy.UI.ViewMoel
         {
             get => _elementsVisibility;
             set => Set(ref _elementsVisibility, value);
+        }
+        public string ActionText
+        {
+            get => _actionText;
+            set => Set(ref _actionText, value);
         }
 
         public OrderEntity SelectedOrder
@@ -99,12 +195,17 @@ namespace Pharmacy.UI.ViewMoel
                     ElementsVisibility = "Hidden";
             }
         }
-        public ProductEntity SelectedProduct
+        public Product SelectedProduct
         {
             get => _selectedProduct;
             set => Set(ref _selectedProduct, value);
         }
-
+        
+        public string IsCalculateSucces
+        {
+            get => _isCalculateSucces;
+            set { Set(() => IsCalculateSucces, ref _isCalculateSucces, value); }
+        }
         public string IsActionSuccess
         {
             get => _isActionSuccess;
@@ -115,7 +216,7 @@ namespace Pharmacy.UI.ViewMoel
 
         private void OnChangeEditModeCommandExecuted() => IsEditMode = !IsEditMode;
 
-        private void OnAddOrderCommandExecuted()
+        private async Task OnAddOrderCommandExecuted()
         {
             Orders.Insert(0,
                             new OrderEntity(new Order
@@ -124,10 +225,19 @@ namespace Pharmacy.UI.ViewMoel
                                 Prise = 0,
                                 UserId = 0,
                                 Date=DateTime.Today,
-                                Time=DateTime.Now.TimeOfDay
+                                Time=DateTime.Now.TimeOfDay,
+                                Products = new List<Product>()
                             }));
 
             SelectedOrder = Orders.First();
+            ActionText = "Заказ создан";
+            IsActionSuccess = "Visible";
+            await Task.Run(() =>
+            {
+               
+                Thread.Sleep(1500);
+                IsActionSuccess = "Hidden";
+            });
         }
 
         private async Task OnRemoveOrderCommandExecuted()
@@ -149,7 +259,7 @@ namespace Pharmacy.UI.ViewMoel
 
         private async Task OnApplyOrderChangesCommandExecuted()
         {
-            if(Products!=null)
+            if(SelectedOrder.Entity.Products != null)
             {
                 if (SelectedOrder.Entity.OrderId == 0)
                     await _orderService.AddAsync(SelectedOrder.Entity);
@@ -166,7 +276,7 @@ namespace Pharmacy.UI.ViewMoel
             });
         }
 
-        private async Task ReloadOrdersAsync()
+        public async Task ReloadOrdersAsync()
         {
             var dbSales = await _orderService.GetAllAsync();
             Orders.Clear();
@@ -174,11 +284,13 @@ namespace Pharmacy.UI.ViewMoel
             foreach (var sale in dbSales)
                 Orders.Add(new OrderEntity(sale));
 
+            SelectedOrder = null;
+            ActionText = "Заказ удален";
             IsActionSuccess = "Visible";
 
             await Task.Run(() =>
             {
-                Thread.Sleep(2500);
+                Thread.Sleep(1500);
                 IsActionSuccess = "Hidden";
             });
         }

@@ -10,7 +10,9 @@ namespace Pharmacy.Shared.IEntityService
 {
     public interface IOrderService : IService<Order>
     {
-        Task<double> GetAVGPriseAsync(DateTime startDate, DateTime EndDate);
+        Task<double> GetAVGPriseAsync(DateTime startDate, DateTime EndDate, string Condition);
+        Task<double> GetMinPriseAsync(DateTime startDate, DateTime EndDate, string Condition);
+        Task<double> GetMaxPriseAsync(DateTime startDate, DateTime EndDate, string Condition);
         Task<IEnumerable<Order>> GetOrersOnSelectedDateAsync(DateTime startDate, DateTime EndDate);
     }
 }

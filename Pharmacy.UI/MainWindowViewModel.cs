@@ -43,12 +43,10 @@ namespace Pharmacy.UI
             AddressesContext = new AddressViewModel(Address);
             OrdersContext = new OrderViewModel(Order,Product);
             ProductsContext = new ProductViewModel(Product);
-            ReportsContext = new ReportViewModel(Report);
+            ReportsContext = new ReportViewModel(Order,Report);
             UsersContext = new UserViewModel(User, Address);
             CurrentPage = new Page();
-
-            UserVisibility = "Hidden";
-            BackgroundImage = @"../Images/Phone.jpg";
+            _regionManager.RequestNavigate("ViewMainFrame", "MainWindowPage");
         }
 
         public bool IsChecked

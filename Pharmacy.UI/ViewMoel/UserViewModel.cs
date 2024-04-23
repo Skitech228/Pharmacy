@@ -31,6 +31,8 @@ namespace Pharmacy.UI.ViewMoel
         private string _isActionSuccess;
         private ObservableCollection<AddressEntity> _addresses;
         private AddressEntity _selectedAddress;
+        private string _passwordChange;
+        private AsyncRelayCommand _changePasswordRelayCommand;
 
         public UserViewModel(IUserService userService,IAddressService addressService)
         {
@@ -39,6 +41,7 @@ namespace Pharmacy.UI.ViewMoel
             Users = new ObservableCollection<UserEntity>();
             Addresses = new ObservableCollection<AddressEntity>();
             Dispatcher.CurrentDispatcher.InvokeAsync(async () => await ReloadUsersAsync());
+            PasswordChange = "Сменить пароль";
             ElementsVisibility = "Hidden";
             IsActionSuccess = "Hidden";
 
@@ -79,6 +82,11 @@ namespace Pharmacy.UI.ViewMoel
             get => _isEditMode;
             set => Set(ref _isEditMode, value);
         }
+        public string PasswordChange
+        {
+            get => _passwordChange;
+            set => Set(ref _passwordChange, value);
+        }
 
         public string ElementsVisibility
         {
@@ -92,11 +100,6 @@ namespace Pharmacy.UI.ViewMoel
             set
             {
                 Set(ref _selectedUser, value);
-
-                if (_selectedUser is not null)
-                    ElementsVisibility = "Visible";
-                else
-                    ElementsVisibility = "Hidden";
             }
         }
 
@@ -187,6 +190,19 @@ namespace Pharmacy.UI.ViewMoel
                 SelectedUser.Entity.AddressId = SelectedAddress.Entity.AddressId;
                 await _userService.UpdateAsync(SelectedUser.Entity);
             }
+            await ReloadUsersAsync();
+            IsActionSuccess = "Visible";
+
+            await Task.Run(() =>
+            {
+                Thread.Sleep(2500);
+                IsActionSuccess = "Hidden";
+            });
+        }
+        public async Task OnUpateUserCommandExecuted(UserEntity selectedUser)
+        {
+            await _userService.UpdateAsync(selectedUser.Entity);
+
             await ReloadUsersAsync();
             IsActionSuccess = "Visible";
 

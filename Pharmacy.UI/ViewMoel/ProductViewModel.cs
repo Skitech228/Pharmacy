@@ -62,7 +62,6 @@ namespace Pharmacy.UI.ViewMoel
             get => _products;
             set => Set(ref _products, value);
         }
-
         public bool IsEditMode
         {
             get => _isEditMode;
@@ -148,7 +147,7 @@ namespace Pharmacy.UI.ViewMoel
             });
         }
 
-        private async Task ReloadProductsAsync()
+        public async Task ReloadProductsAsync()
         {
             var dbSales = await _productService.GetAllAsync();
             Products.Clear();

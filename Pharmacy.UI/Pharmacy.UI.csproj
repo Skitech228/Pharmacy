@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="5.0.1-ci589" />
+    <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1001" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="Prism.Unity" Version="8.1.97" />
   </ItemGroup>

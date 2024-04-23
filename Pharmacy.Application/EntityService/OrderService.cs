@@ -49,8 +49,12 @@ namespace Pharmacy.Application.EntityService
         /// <inheritdoc />
         public async Task<IEnumerable<Order>> GetAllAsync() => await _context.Orders.ToListAsync();
 
-        public async Task<double> GetAVGPriseAsync(DateTime startDate, DateTime EndDate) =>
-            await _context.Orders.Where(x => x.Date >= startDate && x.Date <= EndDate).Select(x => x.Prise).AverageAsync();
+        public async Task<double> GetAVGPriseAsync(DateTime startDate, DateTime EndDate, string Condition) =>
+            await _context.Orders.Where(x => x.Date >= startDate && x.Date <= EndDate).Where(x=>x.Condition==Condition).Select(x => x.Prise).AverageAsync();
+        public async Task<double> GetMinPriseAsync(DateTime startDate, DateTime EndDate, string Condition) =>
+    await _context.Orders.Where(x => x.Date >= startDate && x.Date <= EndDate).Where(x => x.Condition == Condition).Select(x => x.Prise).MinAsync();
+        public async Task<double> GetMaxPriseAsync(DateTime startDate, DateTime EndDate,string Condition) =>
+await _context.Orders.Where(x => x.Date >= startDate && x.Date <= EndDate).Where(x => x.Condition == Condition).Select(x => x.Prise).MaxAsync();
 
         public async Task<IEnumerable<Order>> GetOrersOnSelectedDateAsync(DateTime startDate, DateTime EndDate) =>
             await _context.Orders.Where(x => x.Date >= startDate).Where(x=>x.Date <= EndDate).ToListAsync();

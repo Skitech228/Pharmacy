@@ -18,7 +18,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Pharmacy.UI.ViewMoel.Pages.PageViewModel
 {
-    internal class AuntificationPageViewModel : ViewModelBase, INavigationAware
+    public class AuntificationPageViewModel : ViewModelBase, INavigationAware
     {
         public UserViewModel _usersContext;
         private readonly IRegionManager _regionManager;
@@ -79,6 +79,11 @@ namespace Pharmacy.UI.ViewMoel.Pages.PageViewModel
                         await Task.Run(() => { Thread.Sleep(2500); });
                         var navigationParameters = new NavigationParameters();
                         navigationParameters.Add("selectedUser", user);
+                        navigationParameters.Add("AddressesContext", AddressesContext);
+                        navigationParameters.Add("OrdersContext", OrdersContext);
+                        navigationParameters.Add("ProductsContext", ProductsContext);
+                        navigationParameters.Add("ReportsContext", ReportsContext);
+                        navigationParameters.Add("UsersContext", UsersContext);
                         ClearInformation();
                         _regionManager.RequestNavigate("ViewMainFrame", "MainWindowPage", navigationParameters);
                     }

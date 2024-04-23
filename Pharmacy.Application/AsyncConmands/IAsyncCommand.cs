@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace Pharmacy.Application.AsyncConmands
 {
-    internal interface IAsyncCommand : ICommand
+    public interface IAsyncCommand : ICommand
     {
         Task ExecuteAsync();
 
