@@ -1,4 +1,4 @@
-# Pharmacy
+<h1 align="center">Pharmacy</h1>
 
 **Pharmacy** is a desktop application for pharmacy management, developed using WPF and C#. The project follows the MVVM design pattern, implemented with the Prism library, and uses Entity Framework to access an SQL database.
 
